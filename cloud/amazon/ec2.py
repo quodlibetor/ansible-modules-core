@@ -571,7 +571,9 @@ def get_instance_info(inst):
                      'root_device_type': inst.root_device_type,
                      'root_device_name': inst.root_device_name,
                      'state': inst.state,
-                     'hypervisor': inst.hypervisor}
+                     'tags': inst.tags,
+                     'hypervisor': inst.hypervisor,
+                     'vpc_id': inst.vpc_id}
     try:
         instance_info['virtualization_type'] = getattr(inst,'virtualization_type')
     except AttributeError:
@@ -983,6 +985,7 @@ def create_instances(module, ec2, override_count=None):
     created_instance_ids = []
     for inst in running_instances:
         d = get_instance_info(inst)
+        d['tags'].update(instance_tags)
         created_instance_ids.append(inst.id)
         instance_dict_array.append(d)
 
